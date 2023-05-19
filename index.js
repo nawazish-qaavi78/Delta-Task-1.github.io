@@ -63,12 +63,13 @@ class Snake {
         }
     }
 
-    //add something such that the new block will be exactly behind 
+    //create a new div for new snake tail
     extend_tail() {
         const game_screen = document.getElementById("game-screen");
 
         const block = document.createElement("div");
         block.classList.add("snake");
+        this.snake_tail = block;
 
         game_screen.appendChild(block);
     }
