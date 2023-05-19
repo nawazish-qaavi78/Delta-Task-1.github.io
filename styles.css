@@ -2,21 +2,16 @@
 .arrow {
     width: 50px;
     height: 50px;
-    background-color: blue;
     margin-bottom: 5px;
 }
-#down {
-    background-image: url(images/up.png);
-}
+
 #left {
     display: inline-block;
     margin-right: 50px;
 }
+
 #right {
     display: inline-block;
-}
-#up {
-    background-image: url(images/up.png);
 }
 
 
@@ -26,6 +21,7 @@
     width: 20px;
     position: absolute;
 }
+
 .fruit-display {
     height: 20px;
     width: 20px;
@@ -41,6 +37,7 @@
     background-color: black;
     text-align: center;
 }
+
 #clock {
     color: white;
     position: relative;
@@ -56,6 +53,7 @@
     display: inline-block;
     margin-right: 20px;
 }
+
 #score {
     color: white;
     position: relative;
@@ -68,6 +66,7 @@
     background-color: green;
     z-index: 1;
 }
+
 .snake {
     height: 20px;
     width: 20px;
