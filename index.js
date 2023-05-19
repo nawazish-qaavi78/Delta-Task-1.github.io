@@ -1,15 +1,22 @@
 var MOVE_DISTANCE = 20;
 var MOVE_DIRECTION = "X";
 var TIME_DELAY = 305;
+var TIME_GAIN = 5;
 var GAME_SCREEN_DIMENSION = 400 < parseFloat(screen.width) ? 400 : parseFloat(screen.width);// this is for when mobile is used the screen is small so we adjust the game screen to it
 var SNAKE_BOUNDARY = GAME_SCREEN_DIMENSION - 30;
 var BITE_DISTANCE = 20;
 var MAX_FRUITS_AT_ONCE = 5;
+
+const body = document.getElementsByTagName("body")[0];
+var body_style = window.getComputedStyle(body);
+var BODY_MARGIN = body_style.getPropertyValue('margin-top');
+
 var game_time = 300;
 var color_range = ["silver", "chocolate", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "blue", "teal", "aqua"];
 var colors = [];
 var score = 0;
 var high_score = localStorage.getItem("highscore") ? localStorage.getItem("highscore") : 0;
+
 
 // adjusting the game_screen
 document.getElementById("game-screen").style.width = GAME_SCREEN_DIMENSION.toString() + "px";
@@ -63,13 +70,12 @@ class Snake {
         }
     }
 
-    //create a new div for new snake tail
+    // adds a new snake div to the game-screen
     extend_tail() {
         const game_screen = document.getElementById("game-screen");
 
         const block = document.createElement("div");
         block.classList.add("snake");
-        this.snake_tail = block;
 
         game_screen.appendChild(block);
     }
@@ -151,7 +157,9 @@ function out_of_game_screen() {
     var style = element.currentStyle || window.getComputedStyle(element);
     var x_cor = style.marginLeft;
     var y_cor = style.marginTop;
-    if (parseFloat(x_cor) > SNAKE_BOUNDARY || parseFloat(x_cor) < 0 || parseFloat(y_cor) > SNAKE_BOUNDARY || parseFloat(y_cor) < 0) {
+    var x_out_of_boundary = parseFloat(x_cor) > SNAKE_BOUNDARY || parseFloat(x_cor) < parseFloat(BODY_MARGIN);
+    var y_out_boundary = parseFloat(y_cor) < 0 || parseFloat(y_cor) > SNAKE_BOUNDARY;
+    if (x_out_of_boundary || y_out_boundary) {
         return true;
     }
     return false;
@@ -174,7 +182,8 @@ function snake_speed_up() {
     TIME_DELAY -= 10;
 }
 
-// when called it should create fruits, of different color... should appened each color in the "colors"
+
+// when called it creates a random number of fruits of different fruits onto game screen and also display the order in which the fruits are to be eaten
 function create_furits() {
     snake_speed_up();
     const game_screen = document.getElementById("game-screen");
@@ -204,7 +213,6 @@ function create_furits() {
 }
 
 
-
 // will return the div element which is to be eaten next or the the first div to be eatern
 function next_fruit() {
     var fruits_on_screen = document.querySelectorAll(".fruit");
@@ -213,6 +221,7 @@ function next_fruit() {
 
 // check if ate the ryt fruit, remove the fruit when it ate the ryt fruit
 function ate_fruit(colors) {
+    // to check when all the fruits are eaten
     if (colors.length <= 0) {
         create_furits();
         return;
@@ -232,7 +241,7 @@ function ate_fruit(colors) {
     var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
 
     if (did_bite) {
-        game_time += 30;
+        game_time += TIME_GAIN;
         increase_score();
         snake.extend_tail();
         fruit.remove();
@@ -259,7 +268,6 @@ function game() {
 
 // starting the game loop
 var start_game = setInterval(game, TIME_DELAY);
-
 
 // initializing clock
 var clock = setInterval(function () {
