@@ -6,6 +6,7 @@ var GAME_SCREEN_DIMENSION = 400 < parseFloat(screen.width) ? 400 : parseFloat(sc
 var SNAKE_BOUNDARY = GAME_SCREEN_DIMENSION - 30;
 var BITE_DISTANCE = 20;
 var MAX_FRUITS_AT_ONCE = 5;
+var To_PAUSE = true;
 
 const body = document.getElementsByTagName("body")[0];
 var body_style = window.getComputedStyle(body);
@@ -138,7 +139,10 @@ function set_head(input_key) {
 
 //setting the direction of snake when keyboard input is given
 document.addEventListener("keydown", function (e) {
-    set_head(e.key);
+    var letter = e.key;
+    if(letter==='w' || letter==='a' || letter==='s' || letter==='d'){
+        set_head(e.key);
+    }
 });
 
 // setting the direction of snake when steering is used
@@ -284,12 +288,19 @@ var clock = setInterval(function () {
     document.getElementById("clock").innerText = "Time: " + game_time.toString() + " sec";
 }, 1000)
 
-// pausing the game at at particular place
+// pausing the game
 document.addEventListener("keydown", function (e) {
     if (e.key === "k") {
-        clearInterval(start_game);
-        clearInterval(clock);
-    } else if (e.key === 'j') {
-        start_game = setInterval(game, TIME_DELAY);
+        if(To_PAUSE){
+            clearInterval(start_game);
+            clearInterval(clock);
+            To_PAUSE = false;
+        }
+        else{
+            if(game_time>0 && !out_of_game_screen && !snake.bit_self){
+                start_game = setInterval(game, TIME_DELAY);
+                To_PAUSE= true;
+            }
+        }
     }
 });
