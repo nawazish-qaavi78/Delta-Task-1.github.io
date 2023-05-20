@@ -35,14 +35,14 @@
     height: 400px;
     width: 400px;
     background-color: black;
-    text-align: center;
 }
 
 #clock {
     color: white;
     position: relative;
     display: inline-block;
-    margin-right: 70px;
+    margin-left: 7px;
+    margin-right: 14px;
 }
 
 
@@ -51,7 +51,7 @@
     color: white;
     position: relative;
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 14px;
 }
 
 #score {
