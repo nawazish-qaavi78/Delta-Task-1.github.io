@@ -139,9 +139,12 @@ function set_head(input_key) {
 
 //setting the direction of snake when keyboard input is given
 document.addEventListener("keydown", function (e) {
-    var letter = e.key;
-    if(letter==='w' || letter==='a' || letter==='s' || letter==='d'){
-        set_head(e.key);
+    var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
+    if(game_on){
+        var letter = e.key;
+        if(letter==='w' || letter==='a' || letter==='s' || letter==='d'){
+            set_head(e.key);
+        }
     }
 });
 
@@ -297,7 +300,8 @@ document.addEventListener("keydown", function (e) {
             To_PAUSE = false;
         }
         else{
-            if(game_time>0 && !out_of_game_screen && !snake.bit_self){
+            var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
+            if(game_on){
                 start_game = setInterval(game, TIME_DELAY);
                 To_PAUSE= true;
             }
