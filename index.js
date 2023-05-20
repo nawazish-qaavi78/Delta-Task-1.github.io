@@ -33,11 +33,6 @@ document.getElementById("game-screen").style.height = GAME_SCREEN_DIMENSION.toSt
 // printing the highscore
 document.getElementById("high-score").innerText = "High Score: " + high_score;
 
-// setting the game-pad according to the screen
-document.getElementById("up").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 25).toString() + "px";
-document.getElementById("down").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 25).toString() + "px";
-document.getElementById("left").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 76).toString() + "px";
-
 // since we need another snake for multi-player mode
 class Snake {
 
