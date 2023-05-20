@@ -102,6 +102,9 @@ class Snake {
     }
 }
 
+// creating snake object
+var snake = new Snake();
+
 // to set the direction in which the snake head must move
 function set_head(input_key) {
     switch (input_key) {
@@ -130,6 +133,7 @@ function set_head(input_key) {
             }
             break;
     }
+    snake.move_snake();// this is to ensure that the snake moves in the direction before another input is taken and it's direction is changed again
 }
 
 //setting the direction of snake when keyboard input is given
@@ -257,8 +261,6 @@ function ate_fruit(colors) {
     }
 }
 
-// creating snake object
-var snake = new Snake();
 
 function game() {
     snake.move_snake();
