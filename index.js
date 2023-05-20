@@ -11,6 +11,12 @@ const body = document.getElementsByTagName("body")[0];
 var body_style = window.getComputedStyle(body);
 var BODY_MARGIN = body_style.getPropertyValue('margin-top');
 
+// this will ensure that game screen has at least some margin to end of the screen
+if (GAME_SCREEN_DIMENSION < 400) {
+    GAME_SCREEN_DIMENSION -= 2 * BODY_MARGIN;
+}
+
+
 var game_time = 300;
 var color_range = ["silver", "chocolate", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "blue", "teal", "aqua"];
 var colors = [];
@@ -22,6 +28,7 @@ var high_score = localStorage.getItem("highscore") ? localStorage.getItem("highs
 document.getElementById("game-screen").style.width = GAME_SCREEN_DIMENSION.toString() + "px";
 document.getElementById("game-screen").style.height = GAME_SCREEN_DIMENSION.toString() + "px";
 
+
 // printing the highscore
 document.getElementById("high-score").innerText = "High Score: " + high_score;
 
@@ -30,7 +37,7 @@ document.getElementById("up").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 
 document.getElementById("down").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 25).toString() + "px";
 document.getElementById("left").style.marginLeft = ((GAME_SCREEN_DIMENSION / 2) - 76).toString() + "px";
 
-
+// since we need another snake for multi-player mode
 class Snake {
 
     constructor() {
