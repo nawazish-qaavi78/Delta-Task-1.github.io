@@ -103,33 +103,36 @@ var snake = new Snake();
 
 // to set the direction in which the snake head must move
 function set_head(input_key) {
-    switch (input_key) {
-        case 'w':
-            if (MOVE_DIRECTION === 'X') {
-                MOVE_DIRECTION = 'Y';
-                MOVE_DISTANCE = -1 * Math.abs(MOVE_DISTANCE);
-            }
-            break;
-        case 'a':
-            if (MOVE_DIRECTION === 'Y') {
-                MOVE_DIRECTION = 'X';
-                MOVE_DISTANCE = -1 * Math.abs(MOVE_DISTANCE);
-            }
-            break;
-        case 's':
-            if (MOVE_DIRECTION === 'X') {
-                MOVE_DIRECTION = 'Y';
-                MOVE_DISTANCE = Math.abs(MOVE_DISTANCE);
-            }
-            break;
-        case 'd':
-            if (MOVE_DIRECTION === 'Y') {
-                MOVE_DIRECTION = 'X';
-                MOVE_DISTANCE = Math.abs(MOVE_DISTANCE);
-            }
-            break;
+    var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
+    if(game_on) {
+        switch (input_key) {
+            case 'w':
+                if (MOVE_DIRECTION === 'X') {
+                    MOVE_DIRECTION = 'Y';
+                    MOVE_DISTANCE = -1 * Math.abs(MOVE_DISTANCE);
+                }
+                break;
+            case 'a':
+                if (MOVE_DIRECTION === 'Y') {
+                    MOVE_DIRECTION = 'X';
+                    MOVE_DISTANCE = -1 * Math.abs(MOVE_DISTANCE);
+                }
+                break;
+            case 's':
+                if (MOVE_DIRECTION === 'X') {
+                    MOVE_DIRECTION = 'Y';
+                    MOVE_DISTANCE = Math.abs(MOVE_DISTANCE);
+                }
+                break;
+            case 'd':
+                if (MOVE_DIRECTION === 'Y') {
+                    MOVE_DIRECTION = 'X';
+                    MOVE_DISTANCE = Math.abs(MOVE_DISTANCE);
+                }
+                break;
+        }
+        snake.move_snake();// this is to ensure that the snake moves in the direction before another input is taken and it's direction is changed again
     }
-    snake.move_snake();// this is to ensure that the snake moves in the direction before another input is taken and it's direction is changed again
 }
 
 //setting the direction of snake when keyboard input is given
@@ -143,24 +146,22 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+
 // setting the direction of snake when steering is used
 document.getElementById("up").addEventListener("click", function () {
-    set_head("w");
+   set_head("w");
 });
 document.getElementById("down").addEventListener("click", function () {
     set_head("s");
+    
 });
 document.getElementById("right").addEventListener("click", function () {
     set_head("d");
+    
 });
 document.getElementById("left").addEventListener("click", function () {
     set_head("a");
-});
-document.getElementById("up").addEventListener("click", function () {
-    set_head("w");
-});
-document.getElementById("up").addEventListener("click", function () {
-    set_head("w");
+    
 });
 
 
