@@ -16,17 +16,13 @@
 }
 
 
-/* letters */
-.letter {
-    color: white;
-    position: absolute;
-}
-.letter-display {
-    color: black;
-    position: relative;
-    display: inline-block;
-}
 
+.fruit {
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+}
 
 /* game screen  */
 #game-screen {
@@ -45,11 +41,22 @@
 
 #pause {
     color: white;
+    background-color: black;
     position: relative;
     display: inline;
     margin-right: 14px;
 }
 
+/* letters */
+.letter {
+    color: white;
+    position: absolute;
+}
+.letter-display {
+    color: black;
+    position: relative;
+    display: inline-block;
+}
 
 /* scoring system  */
 #high-score {
