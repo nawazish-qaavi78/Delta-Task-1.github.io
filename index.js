@@ -5,7 +5,7 @@ var TIME_GAIN = 5;
 var GAME_SCREEN_DIMENSION = 400 < parseFloat(screen.width) ? 400 : parseFloat(screen.width);// this is for when mobile is used the screen is small so we adjust the game screen to it
 var SNAKE_BOUNDARY = GAME_SCREEN_DIMENSION - 30;
 var BITE_DISTANCE = 20;
-var MAX_FRUITS_AT_ONCE = 5;
+var SOUND = new Audio("sounds/eat.wav");
 var To_PAUSE = true;
 
 const body = document.getElementsByTagName("body")[0];
@@ -19,8 +19,8 @@ if (GAME_SCREEN_DIMENSION < 400) {
 
 
 var game_time = 300;
-var color_range = ["silver", "chocolate", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "blue", "teal", "aqua"];
-var colors = [];
+var words = ["red", "trichy", "NIT", "Delta", "Force", "webdev", "coding"];
+var letters = [];
 var score = 0;
 var high_score = localStorage.getItem("highscore") ? localStorage.getItem("highscore") : 0;
 
@@ -179,12 +179,9 @@ function out_of_game_screen() {
     return false;
 }
 
-function random_color() {
-    var color = color_range[Math.floor(Math.random() * color_range.length)];
-    while (colors.includes(color)) {
-        color = color_range[Math.floor(Math.random() * color_range.length)];
-    }
-    return color;
+function random_word() {
+    var word = words[Math.floor(Math.random() * words.length)];
+    return word;
 }
 
 function increase_score() {
@@ -197,77 +194,72 @@ function snake_speed_up() {
 }
 
 
-// when called it creates a random number of fruits of different fruits onto game screen and also display the order in which the fruits are to be eaten
-function create_furits() {
+function set_words() {
     snake_speed_up();
     const game_screen = document.getElementById("game-screen");
     const order_screen = document.getElementById("order-screen");
 
-    var no_of_fruits = Math.floor(Math.random() * MAX_FRUITS_AT_ONCE) + 1;
+    var game_word = random_word();
+    letters = game_word.split("");
 
-    // this part will create and place the food in the game screen
-    for (let i = 0; i < no_of_fruits; i++) {
-        var color = random_color();
-        colors.push(color);
-        var new_fruit = document.createElement("div");
-        new_fruit.classList.add("fruit");
-        game_screen.appendChild(new_fruit);
-        new_fruit.style.marginLeft = (Math.random() * 150 + 10).toString() + "px";
-        new_fruit.style.marginTop = (Math.random() * 150 + 10).toString() + "px";
-        new_fruit.style.backgroundColor = color;
+    for (let i = 0; i < letters.length; i++) {
+        var taken_letter = document.createElement("p");
+        taken_letter.classList.add("letter");
+        game_screen.appendChild(taken_letter);
+        taken_letter.style.marginLeft = (Math.random() * 150 + 10).toString() + "px";
+        taken_letter.style.marginTop = (Math.random() * 150 + 10).toString() + "px";
+        taken_letter.innerText = letters[i];
     }
 
-    // this part will show the sequence of the color blocks
-    for (let j = colors.length - 1; j >= 0; j--) {
-        var color_block = document.createElement("div");
-        color_block.classList.add("fruit-display");
-        order_screen.appendChild(color_block);
-        color_block.style.backgroundColor = colors[j];
+    for (let j = 0; j<letters.length; j++) {
+        var letter_order = document.createElement("p");
+        letter_order.classList.add("letter-display");
+        order_screen.appendChild(letter_order);
+        letter_order.innerText= letters[j];
     }
 }
 
 
-// will return the div element which is to be eaten next or the the first div to be eatern
-function next_fruit() {
-    var fruits_on_screen = document.querySelectorAll(".fruit");
-    return fruits_on_screen[fruits_on_screen.length - 1];
+function next_letter() {
+    var letters_on_screen = document.querySelectorAll(".letter");
+    return letters_on_screen[0];
 }
 
-// check if ate the ryt fruit, remove the fruit when it ate the ryt fruit
-function ate_fruit(colors) {
+function ate_letter(letters) {
     // to check when all the fruits are eaten
-    if (colors.length <= 0) {
-        create_furits();
+    if (letters.length <= 0) {
+        set_words();
         return;
     }
 
-    var fruit = next_fruit();
+    var letter_to_eat = next_letter();
 
-    var fruit_style = fruit.currentStyle || window.getComputedStyle(fruit);
+    var letter_style = letter_to_eat.currentStyle || window.getComputedStyle(letter_to_eat);
     var snake_style = snake.snake_head.currentStyle || window.getComputedStyle(snake.snake_head);
 
-    fruit_x_cor = parseFloat(fruit_style.marginLeft);
-    fruit_y_cor = parseFloat(fruit_style.marginTop);
+    var letter_x_cor = parseFloat(letter_style.marginLeft);
+    var letter_y_cor = parseFloat(letter_style.marginTop);
 
-    snake_x_cor = parseFloat(snake_style.marginLeft);
-    snake_y_cor = parseFloat(snake_style.marginTop);
+    var snake_x_cor = parseFloat(snake_style.marginLeft);
+    var snake_y_cor = parseFloat(snake_style.marginTop);
 
-    var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
+    var did_bite = Math.abs(letter_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(letter_y_cor - snake_y_cor) < BITE_DISTANCE;
 
     if (did_bite) {
+        SOUND.play();
         game_time += TIME_GAIN;
         increase_score();
         snake.extend_tail();
-        fruit.remove();
-        document.querySelectorAll(".fruit-display")[0].remove();
-        colors.pop();
+        letter_to_eat.remove();
+        document.querySelectorAll(".letter-display")[0].remove();
+        letters.shift();
     }
 }
 
 
 function game() {
     snake.move_snake();
-    ate_fruit(colors);
+    ate_letter(letters);
     if (out_of_game_screen() || game_time <= 0 || snake.bit_self()) {
         clearInterval(start_game);
         clearInterval(clock);
@@ -301,6 +293,21 @@ document.addEventListener("keydown", function (e) {
                 start_game = setInterval(game, TIME_DELAY);
                 To_PAUSE= true;
             }
+        }
+    }
+});
+document.getElementById("pause").addEventListener("click", function(){
+    if(document.getElementById("pause").innerText === "pause"){
+        clearInterval(start_game);
+        clearInterval(clock);
+        document.getElementById("pause").innerText = "play";
+        To_PAUSE = false;
+    } else {
+        var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
+        if(game_on) {
+            start_game = setInterval(game, TIME_DELAY);
+            document.getElementById("pause").innerText = "pause";
+            To_PAUSE= true;
         }
     }
 });
