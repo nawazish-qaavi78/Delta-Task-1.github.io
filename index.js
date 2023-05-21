@@ -148,18 +148,18 @@ document.addEventListener("keydown", function (e) {
 
 
 // setting the direction of snake when steering is used
-document.getElementById("up").addEventListener("click", function () {
+document.getElementById("w").addEventListener("click", function () {
    set_head("w");
 });
-document.getElementById("down").addEventListener("click", function () {
+document.getElementById("s").addEventListener("click", function () {
     set_head("s");
     
 });
-document.getElementById("right").addEventListener("click", function () {
+document.getElementById("d").addEventListener("click", function () {
     set_head("d");
     
 });
-document.getElementById("left").addEventListener("click", function () {
+document.getElementById("a").addEventListener("click", function () {
     set_head("a");
     
 });
@@ -285,7 +285,7 @@ var start_game = setInterval(game, TIME_DELAY);
 var clock = setInterval(function () {
     game_time -= 1;
     document.getElementById("clock").innerText = "Time: " + game_time.toString() + " sec";
-}, 1000)
+}, 1000);
 
 // pausing the game
 document.addEventListener("keydown", function (e) {
