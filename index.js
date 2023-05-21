@@ -193,9 +193,47 @@ function snake_speed_up() {
     TIME_DELAY -= 10;
 }
 
+function power_up_fruit(){
+    const game_screen = document.getElementById("game-screen");
+    
+    var fruit = document.createElement("div");
+    fruit.classList.add("fruit");
+    
+    game_screen.appendChild(fruit);
+
+    fruit.style.marginLeft = (Math.random() * 150 + 10).toString() + "px";
+    fruit.style.marginTop = (Math.random() * 150 + 10).toString() + "px";
+}
+
+function ate_power_up(){
+    if(document.getElementsByClassName("fruit").length<1){
+        return;
+    }
+    var fruit = document.getElementsByClassName("fruit")[0];
+
+    var fruit_style = fruit.currentStyle || window.getComputedStyle(fruit);
+    var snake_style = snake.snake_head.currentStyle || window.getComputedStyle(snake.snake_head);
+
+    var fruit_x_cor = parseFloat(fruit_style.marginLeft);
+    var fruit_y_cor = parseFloat(fruit_style.marginTop);
+
+    var snake_x_cor = parseFloat(snake_style.marginLeft);
+    var snake_y_cor = parseFloat(snake_style.marginTop);
+    
+    var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
+
+    if(did_bite){
+        TIME_DELAY+=10;
+        fruit.remove();
+    }
+}
+
 
 function set_words() {
     snake_speed_up();
+    if(document.getElementsByClassName("fruit").length<1 && Math.floor(Math.random()*8)===1){ // this is reduces the probability of a power-up showing up and make sure that only one fruit is shown at once
+        power_up_fruit();
+    }
     const game_screen = document.getElementById("game-screen");
     const order_screen = document.getElementById("order-screen");
 
@@ -260,6 +298,7 @@ function ate_letter(letters) {
 function game() {
     snake.move_snake();
     ate_letter(letters);
+    ate_power_up();
     if (out_of_game_screen() || game_time <= 0 || snake.bit_self()) {
         clearInterval(start_game);
         clearInterval(clock);
