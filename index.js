@@ -7,6 +7,7 @@ var SNAKE_BOUNDARY = GAME_SCREEN_DIMENSION - 30;
 var BITE_DISTANCE = 20;
 var SOUND = new Audio("sounds/eat.wav");
 var To_PAUSE = true;
+var LIVES = 3;
 
 const body = document.getElementsByTagName("body")[0];
 var body_style = window.getComputedStyle(body);
@@ -198,6 +199,11 @@ function power_up_fruit(){
     
     var fruit = document.createElement("div");
     fruit.classList.add("fruit");
+    if(Math.floor(Math.random()*4) % 2 === 0){
+        fruit.style.backgroundColor = "red";
+    } else {
+        fruit.style.backgroundColor  = "blue";
+    }
     
     game_screen.appendChild(fruit);
 
@@ -223,7 +229,16 @@ function ate_power_up(){
     var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
 
     if(did_bite){
-        TIME_DELAY+=10;
+        if(fruit.style.backgroundColor === "blue"){
+            TIME_DELAY+=10;
+        } else {
+            if(document.querySelectorAll(".snake").length>4){
+                for(let i = 0; i<3; i++){
+                    var snake_length = document.querySelectorAll(".snake").length;
+                    document.querySelectorAll(".snake")[snake_length-1].remove();
+                }
+            }
+        }
         fruit.remove();
     }
 }
@@ -231,7 +246,7 @@ function ate_power_up(){
 
 function set_words() {
     snake_speed_up();
-    if(document.getElementsByClassName("fruit").length<1 && Math.floor(Math.random()*8)===1){ // this is reduces the probability of a power-up showing up and make sure that only one fruit is shown at once
+    if(document.getElementsByClassName("fruit").length<1){ // this is reduces the probability of a power-up showing up and make sure that only one fruit is shown at once
         power_up_fruit();
     }
     const game_screen = document.getElementById("game-screen");
@@ -299,12 +314,25 @@ function game() {
     snake.move_snake();
     ate_letter(letters);
     ate_power_up();
-    if (out_of_game_screen() || game_time <= 0 || snake.bit_self()) {
-        clearInterval(start_game);
-        clearInterval(clock);
-        if (score > high_score) {
-            localStorage.setItem("highscore", score);
-            document.getElementById("high-score").innerText = "High Score: " + high_score;
+    var game_over = out_of_game_screen() || game_time <= 0 || snake.bit_self();
+    if (game_over) {
+        if (LIVES<1){
+            clearInterval(start_game);
+            clearInterval(clock);
+            if (score > high_score) {
+                localStorage.setItem("highscore", score);
+                document.getElementById("high-score").innerText = "High Score: " + high_score;
+            }
+        } else {
+            LIVES--;
+            document.getElementById("lives").innerText = "Lives: " + LIVES.toString();
+            var snake_len = document.querySelectorAll(".snake").length;
+            for(let i =0; i<snake_len; i++){
+                document.querySelectorAll(".snake")[0].remove();
+            }
+            snake = new Snake();
+            MOVE_DIRECTION = "X";
+            MOVE_DISTANCE = 20
         }
     }
 }
@@ -317,6 +345,8 @@ var clock = setInterval(function () {
     game_time -= 1;
     document.getElementById("clock").innerText = "Time: " + game_time.toString() + " sec";
 }, 1000);
+
+
 
 // pausing the game
 document.addEventListener("keydown", function (e) {
