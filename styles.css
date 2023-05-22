@@ -18,10 +18,10 @@
 
 
 .fruit {
+    position: absolute;
     border-radius: 100%;
     width: 20px;
     height: 20px;
-    background-color: blue;
 }
 
 /* game screen  */
