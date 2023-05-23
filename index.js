@@ -104,8 +104,8 @@ var snake = new Snake();
 
 // to set the direction in which the snake head must move
 function set_head(input_key) {
-    var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
-    if(game_on) {
+    var game_on = game_time > 0 && !out_of_game_screen() && !snake.bit_self();
+    if (game_on) {
         switch (input_key) {
             case 'w':
                 if (MOVE_DIRECTION === 'X') {
@@ -138,10 +138,10 @@ function set_head(input_key) {
 
 //setting the direction of snake when keyboard input is given
 document.addEventListener("keydown", function (e) {
-    var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
-    if(game_on){
+    var game_on = game_time > 0 && !out_of_game_screen() && !snake.bit_self();
+    if (game_on) {
         var letter = e.key;
-        if(letter==='w' || letter==='a' || letter==='s' || letter==='d'){
+        if (letter === 'w' || letter === 'a' || letter === 's' || letter === 'd') {
             set_head(e.key);
         }
     }
@@ -150,19 +150,19 @@ document.addEventListener("keydown", function (e) {
 
 // setting the direction of snake when steering is used
 document.getElementById("w").addEventListener("click", function () {
-   set_head("w");
+    set_head("w");
 });
 document.getElementById("s").addEventListener("click", function () {
     set_head("s");
-    
+
 });
 document.getElementById("d").addEventListener("click", function () {
     set_head("d");
-    
+
 });
 document.getElementById("a").addEventListener("click", function () {
     set_head("a");
-    
+
 });
 
 
@@ -194,25 +194,25 @@ function snake_speed_up() {
     TIME_DELAY -= 10;
 }
 
-function power_up_fruit(){
+function power_up_fruit() {
     const game_screen = document.getElementById("game-screen");
-    
+
     var fruit = document.createElement("div");
     fruit.classList.add("fruit");
-    if(Math.floor(Math.random()*4) % 2 === 0){
+    if (Math.floor(Math.random() * 4) % 2 === 0) {
         fruit.style.backgroundColor = "red";
     } else {
-        fruit.style.backgroundColor  = "blue";
+        fruit.style.backgroundColor = "blue";
     }
-    
+
     game_screen.appendChild(fruit);
 
     fruit.style.marginLeft = (Math.random() * 150 + 10).toString() + "px";
     fruit.style.marginTop = (Math.random() * 150 + 10).toString() + "px";
 }
 
-function ate_power_up(){
-    if(document.getElementsByClassName("fruit").length<1){
+function ate_power_up() {
+    if (document.getElementsByClassName("fruit").length < 1) {
         return;
     }
     var fruit = document.getElementsByClassName("fruit")[0];
@@ -225,17 +225,17 @@ function ate_power_up(){
 
     var snake_x_cor = parseFloat(snake_style.marginLeft);
     var snake_y_cor = parseFloat(snake_style.marginTop);
-    
+
     var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
 
-    if(did_bite){
-        if(fruit.style.backgroundColor === "blue"){
-            TIME_DELAY+=10;
+    if (did_bite) {
+        if (fruit.style.backgroundColor === "blue") {
+            TIME_DELAY += 10;
         } else {
-            if(document.querySelectorAll(".snake").length>4){
-                for(let i = 0; i<3; i++){
+            if (document.querySelectorAll(".snake").length > 4) {
+                for (let i = 0; i < 3; i++) {
                     var snake_length = document.querySelectorAll(".snake").length;
-                    document.querySelectorAll(".snake")[snake_length-1].remove();
+                    document.querySelectorAll(".snake")[snake_length - 1].remove();
                 }
             }
         }
@@ -246,7 +246,7 @@ function ate_power_up(){
 
 function set_words() {
     snake_speed_up();
-    if(document.getElementsByClassName("fruit").length<1){ // this is reduces the probability of a power-up showing up and make sure that only one fruit is shown at once
+    if (document.getElementsByClassName("fruit").length < 1) { // this is reduces the probability of a power-up showing up and make sure that only one fruit is shown at once
         power_up_fruit();
     }
     const game_screen = document.getElementById("game-screen");
@@ -264,11 +264,11 @@ function set_words() {
         taken_letter.innerText = letters[i];
     }
 
-    for (let j = 0; j<letters.length; j++) {
+    for (let j = 0; j < letters.length; j++) {
         var letter_order = document.createElement("p");
         letter_order.classList.add("letter-display");
         order_screen.appendChild(letter_order);
-        letter_order.innerText= letters[j];
+        letter_order.innerText = letters[j];
     }
 }
 
@@ -316,7 +316,7 @@ function game() {
     ate_power_up();
     var game_over = out_of_game_screen() || game_time <= 0 || snake.bit_self();
     if (game_over) {
-        if (LIVES<1){
+        if (LIVES < 1) {
             clearInterval(start_game);
             clearInterval(clock);
             if (score > high_score) {
@@ -327,7 +327,7 @@ function game() {
             LIVES--;
             document.getElementById("lives").innerText = "Lives: " + LIVES.toString();
             var snake_len = document.querySelectorAll(".snake").length;
-            for(let i =0; i<snake_len; i++){
+            for (let i = 0; i < snake_len; i++) {
                 document.querySelectorAll(".snake")[0].remove();
             }
             snake = new Snake();
@@ -351,32 +351,32 @@ var clock = setInterval(function () {
 // pausing the game
 document.addEventListener("keydown", function (e) {
     if (e.key === "k") {
-        if(To_PAUSE){
+        if (To_PAUSE) {
             clearInterval(start_game);
             clearInterval(clock);
             To_PAUSE = false;
         }
-        else{
-            var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
-            if(game_on){
+        else {
+            var game_on = game_time > 0 && !out_of_game_screen() && !snake.bit_self();
+            if (game_on) {
                 start_game = setInterval(game, TIME_DELAY);
-                To_PAUSE= true;
+                To_PAUSE = true;
             }
         }
     }
 });
-document.getElementById("pause").addEventListener("click", function(){
-    if(document.getElementById("pause").innerText === "pause"){
+document.getElementById("pause").addEventListener("click", function () {
+    if (document.getElementById("pause").innerText === "pause") {
         clearInterval(start_game);
         clearInterval(clock);
         document.getElementById("pause").innerText = "play";
         To_PAUSE = false;
     } else {
-        var game_on = game_time>0 && !out_of_game_screen() && !snake.bit_self();
-        if(game_on) {
+        var game_on = game_time > 0 && !out_of_game_screen() && !snake.bit_self();
+        if (game_on) {
             start_game = setInterval(game, TIME_DELAY);
             document.getElementById("pause").innerText = "pause";
-            To_PAUSE= true;
+            To_PAUSE = true;
         }
     }
 });
