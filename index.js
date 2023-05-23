@@ -229,6 +229,7 @@ function ate_power_up() {
     var did_bite = Math.abs(fruit_x_cor - snake_x_cor) < BITE_DISTANCE && Math.abs(fruit_y_cor - snake_y_cor) < BITE_DISTANCE;
 
     if (did_bite) {
+        SOUND.play();
         if (fruit.style.backgroundColor === "blue") {
             TIME_DELAY += 10;
         } else {
